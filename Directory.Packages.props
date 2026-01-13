@@ -1,36 +1,42 @@
-    <Project>
-        <PropertyGroup>
-            <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-            <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
-        </PropertyGroup>
-        <PropertyGroup>
-            <SOURCEKIT_ANALYZERS_VERSION>[1.0.52]</SOURCEKIT_ANALYZERS_VERSION>
-        </PropertyGroup>
-    
-        <!-- dependencies related to the source code -->
-        <ItemGroup>
-            <PackageVersion Include="SourceKit.Analyzers.Collections" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
-            <PackageVersion Include="SourceKit.Analyzers.Enumerable" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
-            <PackageVersion Include="SourceKit.Analyzers.MemberAccessibility" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
-            <PackageVersion Include="SourceKit.Analyzers.Nullable" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
-            <PackageVersion Include="SourceKit.Analyzers.Properties" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
-            
-            <PackageVersion Include="Itmo.Dev.Editorconfig" Version="1.0.13" />
-    
-            <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507" />
-        </ItemGroup>
-        <!-- dependencies related to the tests -->
-        <ItemGroup>
-            <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.11" />
-            <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-            <PackageVersion Include="Moq" Version="4.20.72" />
-            <PackageVersion Include="Moq.AutoMock" Version="3.5.0" />
-            <PackageVersion Include="xunit" Version="2.9.3" />
-            <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5">
-                <PrivateAssets>all</PrivateAssets>
-                <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            </PackageVersion>
-            <PackageVersion Include="coverlet.collector" Version="6.0.4" />
-            <PackageVersion Include="FluentAssertions" Version="8.8.0" />
-        </ItemGroup>
-    </Project>
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SOURCEKIT_ANALYZERS_VERSION>[1.0.52]</SOURCEKIT_ANALYZERS_VERSION>
+  </PropertyGroup>
+  <!-- dependencies related to the source code -->
+  <ItemGroup>
+    <PackageVersion Include="FluentMigrator" Version="7.2.0" />
+    <PackageVersion Include="FluentMigrator.Runner" Version="7.2.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="9.0.11" />
+    <PackageVersion Include="Npgsql" Version="9.0.4" />
+    <PackageVersion Include="SourceKit.Analyzers.Collections" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
+    <PackageVersion Include="SourceKit.Analyzers.Enumerable" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
+    <PackageVersion Include="SourceKit.Analyzers.MemberAccessibility" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
+    <PackageVersion Include="SourceKit.Analyzers.Nullable" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
+    <PackageVersion Include="SourceKit.Analyzers.Properties" Version="$(SOURCEKIT_ANALYZERS_VERSION)" />
+    <PackageVersion Include="Itmo.Dev.Editorconfig" Version="1.0.13" />
+    <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.507" />
+  </ItemGroup>
+  <!-- dependencies related to the tests -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="Moq.AutoMock" Version="3.5.0" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="FluentAssertions" Version="8.8.0" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,19 @@
+syntax = "proto3";
+package common;
+
+import "google/protobuf/timestamp.proto";
+
+message EventMeta {
+  string event_id = 1;
+
+  google.protobuf.Timestamp occurred_at = 2;
+
+  string source_service = 3;
+
+  int32 schema_version = 4;
+
+  optional string trace_id = 5;
+  optional string span_id = 6;
+
+  optional string correlation_id = 7;
+}

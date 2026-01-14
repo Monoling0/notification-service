@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Monoling0.NotificationService.Options;
+using Monoling0.NotificationService.Persistence.Options;
 using Npgsql;
 
 namespace Monoling0.NotificationService.Persistence.Database;

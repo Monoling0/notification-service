@@ -1,6 +1,3 @@
 namespace Monoling0.NotificationService.Observability;
 
-public class TracingContext
-{
-    
-}
+public sealed record TracingContext(string? TraceId, string? SpanId, bool? Sampled);

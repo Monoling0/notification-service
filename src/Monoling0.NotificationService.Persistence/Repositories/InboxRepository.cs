@@ -35,7 +35,7 @@ public class InboxRepository : IInboxRepository
                     "status", EnumDatabaseCodeConverter<InboxEventStatus>.ToDatabaseCode(InboxEventStatus.Received));
             });
 
-        int rowsAffected = await command.ExecuteNonQueryAsync(cancellationToken);
+        int rowsAffected = await command.AsNonQueryAsync(cancellationToken);
         return rowsAffected == 1 ? InboxDecision.Accepted : InboxDecision.Duplicate;
     }
 
@@ -56,7 +56,7 @@ public class InboxRepository : IInboxRepository
                     "status", EnumDatabaseCodeConverter<InboxEventStatus>.ToDatabaseCode(InboxEventStatus.Processed));
             });
 
-        await command.ExecuteNonQueryAsync(cancellationToken);
+        await command.AsNonQueryAsync(cancellationToken);
     }
 
     public async Task MarkAsFailedAsync(string eventId, string errorMessage, CancellationToken cancellationToken)
@@ -80,6 +80,6 @@ public class InboxRepository : IInboxRepository
                     "status", EnumDatabaseCodeConverter<InboxEventStatus>.ToDatabaseCode(InboxEventStatus.Failed));
             });
 
-        await command.ExecuteNonQueryAsync(cancellationToken);
+        await command.AsNonQueryAsync(cancellationToken);
     }
 }

@@ -6,6 +6,6 @@ public interface IUserEmailCacheRepository
 
     Task<string?> TryGetEmailAsync(long userId, CancellationToken cancellationToken);
 
-    Task<Dictionary<string, string>> GetEmailsAsync(
+    Task<Dictionary<long, string>> GetEmailsAsync(
         IReadOnlyCollection<long> userIds, CancellationToken cancellationToken);
 }

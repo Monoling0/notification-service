@@ -6,7 +6,7 @@ public interface IPendingEmailRequestRepository
 {
     Task CreateAsync(PendingEmailRequest request, CancellationToken cancellationToken);
 
-    Task<PendingEmailRequest?> FindAsync(long correlationId, CancellationToken cancellationToken);
+    Task<PendingEmailRequest?> FindAsync(string correlationId, CancellationToken cancellationToken);
 
     Task MarkCompletedAsync(
         string correlationId, string email, DateTime occuredAt, CancellationToken cancellationToken);

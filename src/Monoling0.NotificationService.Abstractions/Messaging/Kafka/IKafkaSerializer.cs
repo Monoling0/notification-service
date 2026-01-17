@@ -2,7 +2,7 @@ using Google.Protobuf;
 
 namespace Monoling0.NotificationService.Messaging.Kafka;
 
-public interface IKafkaSerializer<T> where T : class, IMessage<T>, new()
+public interface IKafkaSerializer<T> where T : IMessage<T>
 {
     byte[] Serialize(T message);
 

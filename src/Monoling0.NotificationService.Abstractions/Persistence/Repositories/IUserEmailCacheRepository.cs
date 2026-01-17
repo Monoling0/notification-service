@@ -8,4 +8,6 @@ public interface IUserEmailCacheRepository
 
     Task<Dictionary<long, string>> GetEmailsAsync(
         IReadOnlyCollection<long> userIds, CancellationToken cancellationToken);
+
+    Task<Dictionary<long, string>> GetAllEmailsAsync(CancellationToken cancellationToken);
 }

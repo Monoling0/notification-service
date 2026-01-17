@@ -50,7 +50,9 @@ public class UserEmailCacheRepository : IUserEmailCacheRepository
         return await command.AsScalarAsync<string?>(cancellationToken);
     }
 
-    public async Task<Dictionary<long, string>> GetEmailsAsync(IReadOnlyCollection<long> userIds, CancellationToken cancellationToken)
+    public async Task<Dictionary<long, string>> GetEmailsAsync(
+        IReadOnlyCollection<long> userIds,
+        CancellationToken cancellationToken)
     {
         const string sql = """
                            select user_id, email
@@ -60,7 +62,34 @@ public class UserEmailCacheRepository : IUserEmailCacheRepository
 
         await using NpgsqlCommand command = _notificationDatabaseDataSource.DataSource
             .NewCommand(sql)
-            .With(command => command.AddArrayOfParameters("user_id", userIds, NpgsqlDbType.Bigint));
+            .With(command => command.AddArrayOfParameters("user_ids", userIds, NpgsqlDbType.Bigint));
+
+        List<(long Id, string Email)> items = await command.ReadMany(
+            r =>
+            {
+                long id = r.GetInt64(r.GetOrdinal("user_id"));
+                string email = r.GetString(r.GetOrdinal("email"));
+                return (id, email);
+            },
+            cancellationToken);
+
+        var result = new Dictionary<long, string>();
+        foreach ((long id, string email) in items)
+            result[id] = email;
+
+        return result;
+    }
+
+    public async Task<Dictionary<long, string>> GetAllEmailsAsync(CancellationToken cancellationToken)
+    {
+        const string sql = """
+                           select user_id, email
+                           from notification.users_email_cache
+                           order by user_id asc;
+                           """;
+
+        await using NpgsqlCommand command = _notificationDatabaseDataSource.DataSource
+            .NewCommand(sql);
 
         List<(long Id, string Email)> items = await command.ReadMany(
             r =>

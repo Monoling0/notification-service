@@ -62,10 +62,18 @@ public class CourseCacheRepository : ICoursesCacheRepository
             {
                 long id = r.GetInt64(r.GetOrdinal("course_id"));
                 string title = r.GetString(r.GetOrdinal("title"));
-                string description = r.GetString(r.GetOrdinal("description"));
-                string cefrLevel = r.GetString(r.GetOrdinal("cefr_level"));
-                string language = r.GetString(r.GetOrdinal("language"));
-                DateTime publishedAt = r.GetFieldValue<DateTime>(r.GetOrdinal("published_at"));
+                string? description = r.IsDBNull(r.GetOrdinal("description"))
+                    ? null
+                    : r.GetString(r.GetOrdinal("description"));
+                string? cefrLevel = r.IsDBNull(r.GetOrdinal("cefr_level"))
+                    ? null
+                    : r.GetString(r.GetOrdinal("cefr_level"));
+                string? language = r.IsDBNull(r.GetOrdinal("language"))
+                    ? null
+                    : r.GetString(r.GetOrdinal("language"));
+                DateTime? publishedAt = r.IsDBNull(r.GetOrdinal("published_at"))
+                    ? null
+                    : r.GetFieldValue<DateTime>(r.GetOrdinal("published_at"));
                 DateTime updatedAt = r.GetFieldValue<DateTime>(r.GetOrdinal("updated_at"));
 
                 return new CourseCacheItem(id, title, description, cefrLevel, language, publishedAt, updatedAt);

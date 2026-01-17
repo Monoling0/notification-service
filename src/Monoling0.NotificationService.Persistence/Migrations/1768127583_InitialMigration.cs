@@ -21,7 +21,7 @@ public class InitialMigration : IMigration
                                event_id        varchar(64) primary key,
                                topic           varchar(255) not null,
                                partition       int not null,
-                               offset          bigint not null,
+                               message_offset  bigint not null,
                                received_at     timestamptz not null,
                                processed_at    timestamptz null,
                                status          smallint not null,
@@ -30,8 +30,8 @@ public class InitialMigration : IMigration
                                last_error      text null
                            );
                            
-                           create index if not exists ix_inbox_events_topic_partition_offset
-                               on notification.inbox_events(topic, partition, offset);
+                           create index if not exists ix_inbox_events_topic_partition_message_offset
+                               on notification.inbox_events(topic, partition, message_offset);
                            
                            create table if not exists notification.email_outbox
                            (
@@ -98,6 +98,21 @@ public class InitialMigration : IMigration
                                published_at timestamptz null,
                                updated_at   timestamptz not null
                            );
+                           
+                           create table if not exists notification.lesson_completions
+                           (
+                               user_id      bigint not null,
+                               course_id    bigint not null,
+                               lesson_id    bigint not null,
+                               completed_at timestamptz not null,
+                               primary key (user_id, course_id, lesson_id)
+                           );
+                           
+                           create index if not exists ix_lesson_completions_course_lesson
+                               on notification.lesson_completions(course_id, lesson_id);
+                           
+                           create index if not exists ix_lesson_completions_course_user
+                               on notification.lesson_completions(course_id, user_id);
                            """,
         });
     }
@@ -108,6 +123,7 @@ public class InitialMigration : IMigration
         {
             SqlStatement = """
                            drop table if exists notification.courses_cache;
+                           drop table if exists notification.lesson_completions;
                            drop table if exists notification.followers_cache;
                            drop table if exists notification.users_email_cache;
                            drop table if exists notification.pending_email_requests;

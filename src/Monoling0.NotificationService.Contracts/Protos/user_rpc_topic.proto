@@ -1,0 +1,43 @@
+syntax = "proto3";
+package user;
+
+import "google/protobuf/timestamp.proto";
+import "common_event.proto";
+
+message UserRpcEventEnvelope {
+  common.EventMeta meta = 1;
+
+  oneof event {
+    UserEmailRequestEvent user_email_request = 10;
+    UserEmailResponseEvent user_email_response = 11;
+    UserEmailsResponseEvent user_emails_response = 12;
+  }
+}
+
+message UserEmailRequestEvent {
+  string correlation_id = 1;
+  int64 user_id = 2;
+  string purpose = 3;
+  string payload_json = 4;
+  google.protobuf.Timestamp requested_at = 5;
+}
+
+message UserEmailResponseEvent {
+  string correlation_id = 1;
+  int64 user_id = 2;
+  string email = 3;
+  google.protobuf.Timestamp responded_at = 4;
+  optional string error = 5;
+}
+
+message UserEmailResponseItem {
+  string correlation_id = 1;
+  int64 user_id = 2;
+  string email = 3;
+  optional string error = 4;
+}
+
+message UserEmailsResponseEvent {
+  repeated UserEmailResponseItem items = 1;
+  google.protobuf.Timestamp responded_at = 2;
+}

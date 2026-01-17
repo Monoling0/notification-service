@@ -5,7 +5,7 @@ namespace Monoling0.NotificationService.Messaging.Kafka.Models;
 
 public sealed class KafkaConsumedMessage<T>
 {
-    public required string EventId { get; init; }
+    public required string? EventId { get; init; }
 
     public required T Event { get; init; }
 

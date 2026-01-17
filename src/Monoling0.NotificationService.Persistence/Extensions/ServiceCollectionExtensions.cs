@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddScoped<IEmailOutboxRepository, EmailOutboxRepository>();
         serviceCollection.AddScoped<IFollowersCacheRepository, FollowersCacheRepository>();
         serviceCollection.AddScoped<IInboxRepository, InboxRepository>();
+        serviceCollection.AddScoped<ILessonCompletionRepository, LessonCompletionRepository>();
         serviceCollection.AddScoped<IPendingEmailRequestRepository, PendingEmailRequestRepository>();
         serviceCollection.AddScoped<IUserEmailCacheRepository, UserEmailCacheRepository>();
 
@@ -28,9 +29,12 @@ public static class ServiceCollectionExtensions
             .AddFluentMigratorCore()
             .ConfigureRunner(runner => runner
                 .AddPostgres()
-                .WithGlobalConnectionString(sp =>
-                    sp.GetRequiredService<IOptions<PostgresOptions>>().Value.ConnectionString)
-                .WithMigrationsIn(typeof(IAssemblyMaker).Assembly));
+                .WithGlobalConnectionString(serviceProvider =>
+                    serviceProvider
+                        .GetRequiredService<IOptions<PostgresOptions>>()
+                        .Value
+                        .ConnectionString)
+                .WithMigrationsIn(typeof(PersistenceAssemblyMarker).Assembly));
 
         serviceCollection.AddHostedService<MigrationService>();
 

@@ -13,7 +13,11 @@ public class FollowersCacheRepository : IFollowersCacheRepository
         _notificationDatabaseDataSource = notificationDatabaseDataSource;
     }
 
-    public async Task AddAsync(long followerId, long followeeId, DateTime occuredAt, CancellationToken cancellationToken)
+    public async Task AddAsync(
+        long followerId,
+        long followeeId,
+        DateTime occurredAt,
+        CancellationToken cancellationToken)
     {
         const string sql = """
                            insert into notification.followers_cache(followee_id, follower_id, updated_at)
@@ -28,7 +32,7 @@ public class FollowersCacheRepository : IFollowersCacheRepository
             {
                 command.AddParameter("followee_id", followeeId);
                 command.AddParameter("follower_id", followerId);
-                command.AddParameter("updated_at", occuredAt);
+                command.AddParameter("updated_at", occurredAt);
             });
 
         await command.AsNonQueryAsync(cancellationToken);

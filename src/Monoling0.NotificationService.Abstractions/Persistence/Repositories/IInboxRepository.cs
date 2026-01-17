@@ -5,9 +5,9 @@ namespace Monoling0.NotificationService.Persistence.Repositories;
 public interface IInboxRepository
 {
     Task<InboxDecision> TryAcquireAsync(
-        string eventId, InboxEventPosition position, CancellationToken cancellationToken);
+        string? eventId, InboxEventPosition position, CancellationToken cancellationToken);
 
-    Task MarkAsProcessedAsync(string eventId, CancellationToken cancellationToken);
+    ValueTask MarkAsProcessedAsync(string? eventId, CancellationToken cancellationToken);
 
     Task MarkAsFailedAsync(string eventId, string errorMessage, CancellationToken cancellationToken);
 }

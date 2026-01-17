@@ -6,9 +6,9 @@ public static class EnumDatabaseCodeConverter<T> where T : struct, Enum
 
     private sealed class EnumMapping
     {
-        public required IReadOnlyDictionary<T, string> EnumToCode { get; init; }
+        public required Dictionary<T, string> EnumToCode { get; init; }
 
-        public required IReadOnlyDictionary<string, T> CodeToEnum { get; init; }
+        public required Dictionary<string, T> CodeToEnum { get; init; }
     }
 
     public static string ToDatabaseCode(T value)

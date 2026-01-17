@@ -196,7 +196,9 @@ public class EmailOutboxRepository : IEmailOutboxRepository
         {
             OutboxId = reader.GetInt64(reader.GetOrdinal("outbox_id")),
             Kind = reader.GetString(reader.GetOrdinal("kind")),
-            RecipientUserId = reader.IsDBNull(reader.GetOrdinal("recipient_user_id")) ? null : reader.GetInt64(reader.GetOrdinal("recipient_user_id")),
+            RecipientUserId = reader.IsDBNull(reader.GetOrdinal("recipient_user_id"))
+                ? null
+                : reader.GetInt64(reader.GetOrdinal("recipient_user_id")),
             ToEmail = reader.GetString(reader.GetOrdinal("to_email")),
             Subject = reader.GetString(reader.GetOrdinal("subject")),
             Body = reader.GetString(reader.GetOrdinal("body")),
@@ -204,9 +206,15 @@ public class EmailOutboxRepository : IEmailOutboxRepository
             AttemptsCount = reader.GetInt32(reader.GetOrdinal("attempt_count")),
             CreatedAt = reader.GetFieldValue<DateTime>(reader.GetOrdinal("created_at")),
             NextAttemptAt = reader.GetFieldValue<DateTime>(reader.GetOrdinal("next_attempt_at")),
-            LastAttemptAt = reader.GetFieldValue<DateTime>(reader.GetOrdinal("last_attempt_at")),
-            SentAt = reader.GetFieldValue<DateTime>(reader.GetOrdinal("sent_at")),
-            LastError = reader.IsDBNull(reader.GetOrdinal("last_error")) ? null : reader.GetString(reader.GetOrdinal("last_error")),
+            LastAttemptAt = reader.IsDBNull(reader.GetOrdinal("last_attempt_at"))
+                ? null
+                : reader.GetFieldValue<DateTime>(reader.GetOrdinal("last_attempt_at")),
+            SentAt = reader.IsDBNull(reader.GetOrdinal("sent_at"))
+                ? null
+                : reader.GetFieldValue<DateTime>(reader.GetOrdinal("sent_at")),
+            LastError = reader.IsDBNull(reader.GetOrdinal("last_error"))
+                ? null
+                : reader.GetString(reader.GetOrdinal("last_error")),
         };
     }
 }

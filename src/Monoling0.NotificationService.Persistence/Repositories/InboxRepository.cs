@@ -15,11 +15,21 @@ public class InboxRepository : IInboxRepository
         _notificationDatabaseDataSource = notificationDatabaseDataSource;
     }
 
-    public async Task<InboxDecision> TryAcquireAsync(string eventId, InboxEventPosition position, CancellationToken cancellationToken)
+    public async Task<InboxDecision> TryAcquireAsync(
+        string? eventId,
+        InboxEventPosition position,
+        CancellationToken cancellationToken)
     {
         const string sql = """
-                     insert into notification.inbox_events(event_id, topic, partition, offset, received_at, status, attempt_count)
-                     values (@event_id, @topic, @partition, @offset, now(), @status, 0)
+                     insert into notification.inbox_events(
+                         event_id,
+                         topic,
+                         partition,
+                         message_offset,
+                         received_at,
+                         status,
+                         attempt_count)
+                     values (@event_id, @topic, @partition, @message_offset, now(), @status, 0)
                      on conflict (event_id) do nothing;
                      """;
 
@@ -30,7 +40,7 @@ public class InboxRepository : IInboxRepository
                 command.AddParameter("event_id", eventId);
                 command.AddParameter("topic", position.Topic);
                 command.AddParameter("partition", position.Partition);
-                command.AddParameter("offset", position.Offset);
+                command.AddParameter("message_offset", position.Offset);
                 command.AddParameter(
                     "status", EnumDatabaseCodeConverter<InboxEventStatus>.ToDatabaseCode(InboxEventStatus.Received));
             });
@@ -39,12 +49,12 @@ public class InboxRepository : IInboxRepository
         return rowsAffected == 1 ? InboxDecision.Accepted : InboxDecision.Duplicate;
     }
 
-    public async Task MarkAsProcessedAsync(string eventId, CancellationToken cancellationToken)
+    public async ValueTask MarkAsProcessedAsync(string? eventId, CancellationToken cancellationToken)
     {
         const string sql = """
                            update notification.inbox_events
                            set processed_at = now(), status = @status
-                           where event_id = @eventId;
+                           where event_id = @event_id;
                            """;
 
         await using NpgsqlCommand command = _notificationDatabaseDataSource.DataSource
@@ -67,7 +77,7 @@ public class InboxRepository : IInboxRepository
                                last_error = @errorMessage,
                                attempt_count = attempt_count + 1,
                                last_attempt_at = now()
-                           where event_id = @eventId;
+                           where event_id = @event_id;
                            """;
 
         await using NpgsqlCommand command = _notificationDatabaseDataSource.DataSource

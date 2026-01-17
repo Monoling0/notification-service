@@ -73,13 +73,18 @@ public class PendingEmailRequestRepository : IPendingEmailRequestRepository
                 string purpose = r.GetString(r.GetOrdinal("purpose"));
                 string payloadJson = r.GetString(r.GetOrdinal("payload_json"));
                 string statusCode = r.GetString(r.GetOrdinal("status"));
-                PendingEmailRequestStatus status =
-                    EnumDatabaseCodeConverter<PendingEmailRequestStatus>.FromDatabaseCode(statusCode);
+                PendingEmailRequestStatus status = EnumDatabaseCodeConverter<PendingEmailRequestStatus>.FromDatabaseCode(statusCode);
                 DateTime createdAt = r.GetFieldValue<DateTime>(r.GetOrdinal("created_at"));
                 DateTime expiresAt = r.GetFieldValue<DateTime>(r.GetOrdinal("expires_at"));
-                DateTime completedAt = r.GetFieldValue<DateTime>(r.GetOrdinal("completed_at"));
-                string resolvedEmail = r.GetString(r.GetOrdinal("resolved_email"));
-                string error = r.GetString(r.GetOrdinal("error"));
+                DateTime? completedAt = r.IsDBNull(r.GetOrdinal("completed_at"))
+                    ? null
+                    : r.GetFieldValue<DateTime>(r.GetOrdinal("completed_at"));
+                string? resolvedEmail = r.IsDBNull(r.GetOrdinal("resolved_email"))
+                    ? null
+                    : r.GetString(r.GetOrdinal("resolved_email"));
+                string? error = r.IsDBNull(r.GetOrdinal("error"))
+                    ? null
+                    : r.GetString(r.GetOrdinal("error"));
 
                 return new PendingEmailRequest
                 {
@@ -101,7 +106,7 @@ public class PendingEmailRequestRepository : IPendingEmailRequestRepository
     public async Task MarkCompletedAsync(
         string correlationId,
         string email,
-        DateTime occuredAt,
+        DateTime occurredAt,
         CancellationToken cancellationToken)
     {
         const string sql = """
@@ -119,9 +124,9 @@ public class PendingEmailRequestRepository : IPendingEmailRequestRepository
             {
                 command.AddParameter("correlation_id", correlationId);
                 command.AddParameter("email", email);
-                command.AddParameter("completed_at", occuredAt, NpgsqlDbType.TimestampTz);
+                command.AddParameter("completed_at", occurredAt, NpgsqlDbType.TimestampTz);
                 command.AddParameter("status", EnumDatabaseCodeConverter<PendingEmailRequestStatus>
-                    .ToDatabaseCode(PendingEmailRequestStatus.Pending));
+                    .ToDatabaseCode(PendingEmailRequestStatus.Completed));
             });
 
         await command.AsNonQueryAsync(cancellationToken);
@@ -130,7 +135,7 @@ public class PendingEmailRequestRepository : IPendingEmailRequestRepository
     public async Task MarkFailedAsync(
         string correlationId,
         string errorMessage,
-        DateTime occuredAt,
+        DateTime occurredAt,
         CancellationToken cancellationToken)
     {
         const string sql = """
@@ -147,7 +152,7 @@ public class PendingEmailRequestRepository : IPendingEmailRequestRepository
             {
                 command.AddParameter("correlation_id", correlationId);
                 command.AddParameter("error", errorMessage);
-                command.AddParameter("completed_at", occuredAt, NpgsqlDbType.TimestampTz);
+                command.AddParameter("completed_at", occurredAt, NpgsqlDbType.TimestampTz);
                 command.AddParameter("status", EnumDatabaseCodeConverter<PendingEmailRequestStatus>
                     .ToDatabaseCode(PendingEmailRequestStatus.Failed));
             });

@@ -9,8 +9,8 @@ public interface IPendingEmailRequestRepository
     Task<PendingEmailRequest?> FindAsync(string correlationId, CancellationToken cancellationToken);
 
     Task MarkCompletedAsync(
-        string correlationId, string email, DateTime occuredAt, CancellationToken cancellationToken);
+        string correlationId, string email, DateTime occurredAt, CancellationToken cancellationToken);
 
     Task MarkFailedAsync(
-        string correlationId, string errorMessage, DateTime occuredAt, CancellationToken cancellationToken);
+        string correlationId, string errorMessage, DateTime occurredAt, CancellationToken cancellationToken);
 }

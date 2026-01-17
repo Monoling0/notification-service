@@ -16,7 +16,7 @@ public class PendingEmailRequest
 
     public DateTime ExpiresAt { get; init; }
 
-    public DateTime CompletedAt { get; init; }
+    public DateTime? CompletedAt { get; init; }
 
     public string? ResolvedEmail { get; init; }
 

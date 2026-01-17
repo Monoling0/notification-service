@@ -22,9 +22,9 @@ public class EmailOutboxEntry
 
     public DateTime NextAttemptAt { get; init; }
 
-    public DateTime LastAttemptAt { get; init; }
+    public DateTime? LastAttemptAt { get; init; }
 
-    public DateTime SentAt { get; init; }
+    public DateTime? SentAt { get; init; }
 
     public string? LastError { get; init; }
 }

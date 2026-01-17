@@ -1,0 +1,139 @@
+services:
+  notification-service-postgres:
+    image: postgres:16
+    container_name: notification-service-postgres
+    environment:
+      - POSTGRES_USER=notification
+      - POSTGRES_PASSWORD=notification
+      - POSTGRES_DB=notification
+    ports:
+      - "6532:5432"
+    restart: unless-stopped
+    networks:
+      - databases
+    volumes:
+      - notification-service-postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U notification -d notification" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  
+  notification-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: monoling0-notification-service:local
+    platform: linux/amd64
+    container_name: notification-service
+    networks:
+      - internal
+      - kafka
+      - databases
+    depends_on:
+      notification-service-postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - Persistence__Postgres__ConnectionString=Host=notification-service-postgres;Port=5432;Database=notification;Username=notification;Password=notification
+      - Kafka__Consumer__BootstrapServers=kafka:9094
+      - Kafka__Producer__BootstrapServers=kafka:9094
+      - Email__Sender__Host=mailpit
+      - Email__Sender__Port=1025
+      - Email__Sender__SenderEmail=no-reply@monolingo.local
+      - Email__Sender__UseStartTls=false
+      - Email__Sender__AllowInvalidCertificates=true
+    restart: unless-stopped
+  
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    restart: unless-stopped
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - kafka
+  
+  kafka:
+    image: wurstmeister/kafka:latest
+    restart: unless-stopped
+    environment:
+      KAFKA_LOG_DIRS: /kafka-data
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: EXTERNAL://:9092,INTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://127.0.0.1:8001,INTERNAL://kafka:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CREATE_TOPICS: >
+        user.events:1:1,
+        course.events:1:1,
+        progress.events:1:1,
+        feed.events:1:1,
+        user.email.requests:1:1,
+        user.email.responses:1:1
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka
+    volumes:
+      - monolingo-kafka-data:/kafka-data
+    ports:
+      - '8001:9092'
+  
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    restart: unless-stopped
+    depends_on:
+      - kafka
+    networks:
+      - kafka
+    ports:
+      - "8003:8080"
+    volumes:
+      - ./src/Monoling0.NotificationService.Contracts/Protos:/schemas
+    environment:
+      kafka.clusters.0.name: kafka
+      kafka.clusters.0.bootstrapServers: kafka:9094
+      kafka.clusters.0.defaultKeySerde: String
+      kafka.clusters.0.defaultValueSerde: ProtobufFile
+      
+      kafka.clusters.0.serde.0.name: ProtobufFile
+      kafka.clusters.0.serde.0.properties.protobufFilesDir: /schemas/
+      
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.user.events: user.UserEventEnvelope
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.course.events: course.CourseEventEnvelope
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.progress.events: progress.ProgressEventEnvelope
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.feed.events: feed.FeedEventEnvelope
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.user.email.requests: user.UserRpcEventEnvelope
+      kafka.clusters.0.serde.0.properties.protobufMessageNameByTopic.user.email.responses: user.UserRpcEventEnvelope
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: mailpit
+    restart: unless-stopped
+    networks:
+      - internal
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+
+networks:
+  public:
+    driver: bridge
+  internal:
+    driver: bridge
+    internal: true
+  kafka:
+    driver: bridge
+  databases:
+    driver: bridge
+    internal: true
+
+volumes:
+  monolingo-kafka-data:
+  notification-service-postgres-data:

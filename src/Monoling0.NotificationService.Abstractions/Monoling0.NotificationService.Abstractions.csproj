@@ -7,8 +7,12 @@
         <RootNamespace>Monoling0.NotificationService</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Google.Protobuf" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Monoling0.NotificationService.Contracts\Monoling0.NotificationService.Contracts.csproj" />
+  </ItemGroup>
 
 </Project>

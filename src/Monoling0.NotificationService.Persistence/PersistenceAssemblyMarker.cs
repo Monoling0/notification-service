@@ -1,3 +1,3 @@
 namespace Monoling0.NotificationService.Persistence;
 
-public interface IAssemblyMaker { }
+public sealed class PersistenceAssemblyMarker { }

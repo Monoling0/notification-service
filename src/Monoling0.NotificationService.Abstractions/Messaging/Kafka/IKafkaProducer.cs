@@ -1,3 +1,4 @@
+using Google.Protobuf;
 using Monoling0.NotificationService.Messaging.Headers;
 using Monoling0.NotificationService.Messaging.Kafka.Models;
 
@@ -10,10 +11,10 @@ public interface IKafkaProducer
         KafkaMessageKey key,
         T value,
         MessageHeaders? headers,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken) where T : class, IMessage<T>, new();
 
     Task ProduceManyAsync<T>(
         KafkaTopicName topic,
         IReadOnlyCollection<(KafkaMessageKey Key, T Value, MessageHeaders? Headers)> messages,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken) where T : class, IMessage<T>, new();
 }

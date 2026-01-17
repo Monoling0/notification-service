@@ -189,7 +189,7 @@ public class EmailOutboxRepository : IEmailOutboxRepository
 
     private static EmailOutboxEntry Map(NpgsqlDataReader reader)
     {
-        string statusCode = reader.GetString(reader.GetOrdinal("status"));
+        short statusCode = reader.GetInt16(reader.GetOrdinal("status"));
         EmailOutboxStatus status = EnumDatabaseCodeConverter<EmailOutboxStatus>.FromDatabaseCode(statusCode);
 
         return new EmailOutboxEntry

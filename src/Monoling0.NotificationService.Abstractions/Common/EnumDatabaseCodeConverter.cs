@@ -1,46 +1,21 @@
+using System.Globalization;
+
 namespace Monoling0.NotificationService.Common;
 
 public static class EnumDatabaseCodeConverter<T> where T : struct, Enum
 {
-    private static readonly Lazy<EnumMapping> EnumMappings = new(InitializeMappings());
-
-    private sealed class EnumMapping
+    public static short ToDatabaseCode(T value)
     {
-        public required Dictionary<T, string> EnumToCode { get; init; }
-
-        public required Dictionary<string, T> CodeToEnum { get; init; }
+        return Convert.ToInt16(value, CultureInfo.InvariantCulture);
     }
 
-    public static string ToDatabaseCode(T value)
+    public static T FromDatabaseCode(short code)
     {
-        return EnumMappings.Value.EnumToCode.TryGetValue(value, out string? code)
-            ? code
-            : throw new InvalidOperationException($"Enum value {value} is not defined.");
-    }
+        object rawValue = Convert.ChangeType(code, Enum.GetUnderlyingType(typeof(T)), CultureInfo.InvariantCulture);
 
-    public static T FromDatabaseCode(string code)
-    {
-        return EnumMappings.Value.CodeToEnum.TryGetValue(code, out T value)
-            ? value
-            : throw new InvalidOperationException($"Enum value {code} is not defined.");
-    }
+        if (!Enum.IsDefined(typeof(T), rawValue))
+            throw new InvalidOperationException($"Enum value {code} is not defined.");
 
-    private static EnumMapping InitializeMappings()
-    {
-        var enumToCode = new Dictionary<T, string>();
-        var codeToEnum = new Dictionary<string, T>();
-
-        foreach (T enumValue in Enum.GetValues<T>())
-        {
-            string? description = enumValue.GetDescription();
-
-            if (string.IsNullOrWhiteSpace(description))
-                throw new InvalidOperationException($"Enum value {enumValue} does not have a description");
-
-            enumToCode[enumValue] = description;
-            codeToEnum[description] = enumValue;
-        }
-
-        return new EnumMapping { EnumToCode = enumToCode, CodeToEnum = codeToEnum };
+        return (T)Enum.ToObject(typeof(T), rawValue);
     }
 }

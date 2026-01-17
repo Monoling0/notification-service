@@ -72,7 +72,7 @@ public class PendingEmailRequestRepository : IPendingEmailRequestRepository
                 long userId = r.GetInt64(r.GetOrdinal("user_id"));
                 string purpose = r.GetString(r.GetOrdinal("purpose"));
                 string payloadJson = r.GetString(r.GetOrdinal("payload_json"));
-                string statusCode = r.GetString(r.GetOrdinal("status"));
+                short statusCode = r.GetInt16(r.GetOrdinal("status"));
                 PendingEmailRequestStatus status = EnumDatabaseCodeConverter<PendingEmailRequestStatus>.FromDatabaseCode(statusCode);
                 DateTime createdAt = r.GetFieldValue<DateTime>(r.GetOrdinal("created_at"));
                 DateTime expiresAt = r.GetFieldValue<DateTime>(r.GetOrdinal("expires_at"));

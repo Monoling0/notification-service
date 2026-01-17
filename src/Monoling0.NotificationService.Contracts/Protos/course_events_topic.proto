@@ -1,0 +1,43 @@
+syntax = "proto3";
+package course;
+
+import "google/protobuf/timestamp.proto";
+import "common_event.proto";
+
+message CourseEventEnvelope {
+  common.EventMeta meta = 1;
+
+  oneof event {
+    CoursePublishedEvent course_published = 10;
+    CourseUpdatedEvent course_updated = 11;
+    CourseUnpublishedEvent course_unpublished = 12;
+  }
+}
+
+message CoursePublishedEvent {
+  int64 course_id = 1;
+  string title = 2;
+  optional string description = 3;
+  optional string cefr_level = 4;
+  optional string language = 5;
+  google.protobuf.Timestamp published_at = 6;
+  optional int64 published_by_user_id = 7;
+}
+
+message CourseUpdatedEvent {
+  int64 course_id = 1;
+  bool require_notification = 2;
+  repeated int64 affected_module_ids = 3;
+  repeated int64 affected_lesson_ids = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  optional int64 updated_by_user_id = 6;
+  optional string title = 7;
+  optional string summary = 8;
+}
+
+message CourseUnpublishedEvent {
+  int64 course_id = 1;
+  optional string reason = 2;
+  google.protobuf.Timestamp unpublished_at = 3;
+  optional int64 unpublished_by_user_id = 4;
+}

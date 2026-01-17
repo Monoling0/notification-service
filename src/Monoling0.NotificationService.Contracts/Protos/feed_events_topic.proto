@@ -1,0 +1,49 @@
+syntax = "proto3";
+package feed;
+
+import "google/protobuf/timestamp.proto";
+import "common_event.proto";
+
+message FeedEventEnvelope {
+  common.EventMeta meta = 1;
+
+  oneof event {
+    StreakMilestoneEvent streak_milestone = 10;
+    StreakBrokenEvent streak_broken = 11;
+    LeaderboardPrizeEvent leaderboard_prize = 12;
+    WeeklyReportEvent weekly_report = 13;
+  }
+}
+
+message StreakMilestoneEvent {
+  int64 user_id = 1;
+  int32 streak_days = 2;
+  google.protobuf.Timestamp achieved_at = 3;
+}
+
+message StreakBrokenEvent {
+  int64 user_id = 1;
+  int32 streak_days = 2;
+  google.protobuf.Timestamp broken_at = 3;
+}
+
+message LeaderboardPrizeEvent {
+  int64 user_id = 1;
+  int32 position = 2;
+  int32 bucket_id = 3;
+  google.protobuf.Timestamp week_start = 4;
+  google.protobuf.Timestamp week_end = 5;
+  int32 score_xp = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message WeeklyReportEvent {
+  int64 user_id = 1;
+  google.protobuf.Timestamp week_start = 2;
+  google.protobuf.Timestamp week_end = 3;
+  int32 xp_gained = 4;
+  int32 lessons_completed = 5;
+  optional int32 new_followers_count = 6;
+  optional int32 current_streak_days = 7;
+  google.protobuf.Timestamp generated_at = 8;
+}

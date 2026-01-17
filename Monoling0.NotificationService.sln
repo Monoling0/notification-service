@@ -10,13 +10,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{2258BA
 		Directory.Build.targets = Directory.Build.targets
 		Directory.Packages.props = Directory.Packages.props
 		README.MD = README.MD
+		Dockerfile = Dockerfile
+		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AB6979F5-5280-4F00-88E5-33D4D7401316}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monoling0.NotificationService", "src\Monoling0.NotificationService\Monoling0.NotificationService.csproj", "{1BDF449D-DC5B-4D61-A679-46654865F188}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monoling0.NotificationService.Abstractions", "src\Monoling0.NotificationService.Abstractions\Monoling0.NotificationService.Abstractions.csproj", "{1BDF449D-DC5B-4D61-A679-46654865F188}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monoling0.NotificationService.Tests", "tests\Monoling0.NotificationService.Tests\Monoling0.NotificationService.Tests.csproj", "{B8CADB65-ACD4-47A3-9976-FD632E7F8784}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monoling0.NotificationService.Contracts", "src\Monoling0.NotificationService.Contracts\Monoling0.NotificationService.Contracts.csproj", "{4EFDBFC3-C6B6-4116-829C-5FE851C2413A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monoling0.NotificationService.Persistence", "src\Monoling0.NotificationService.Persistence\Monoling0.NotificationService.Persistence.csproj", "{781EB721-CC85-4BEA-94E8-348462B3461A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{9C86CB50-A226-4774-8ED1-9C464AA02E66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monoling0.NotificationService.Presentation", "src\Presentation\Monoling0.NotificationService.Presentation\Monoling0.NotificationService.Presentation.csproj", "{6A236B60-10FB-415F-9FCA-810BA3905CE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monoling0.NotificationService.Presentation.Kafka", "src\Presentation\Monoling0.NotificationService.Presentation.Kafka\Monoling0.NotificationService.Presentation.Kafka.csproj", "{8B718281-57DE-4AB2-8603-FCEF0EC0E68E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monoling0.NotificationService.Presentation.Email", "src\Presentation\Monoling0.NotificationService.Presentation.Email\Monoling0.NotificationService.Presentation.Email.csproj", "{6AFA083D-2740-4A1C-8262-7789C60CEF32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monoling0.NotificationService.Application", "src\Monoling0.NotificationService.Application\Monoling0.NotificationService.Application.csproj", "{999DFEC2-F6D6-43D2-AE09-B1F31D4DE4E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +42,13 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1BDF449D-DC5B-4D61-A679-46654865F188} = {FEBA41BE-DBBA-4439-9E3F-0975477566E4}
 		{B8CADB65-ACD4-47A3-9976-FD632E7F8784} = {AB6979F5-5280-4F00-88E5-33D4D7401316}
+		{4EFDBFC3-C6B6-4116-829C-5FE851C2413A} = {FEBA41BE-DBBA-4439-9E3F-0975477566E4}
+		{781EB721-CC85-4BEA-94E8-348462B3461A} = {FEBA41BE-DBBA-4439-9E3F-0975477566E4}
+		{9C86CB50-A226-4774-8ED1-9C464AA02E66} = {FEBA41BE-DBBA-4439-9E3F-0975477566E4}
+		{6A236B60-10FB-415F-9FCA-810BA3905CE1} = {9C86CB50-A226-4774-8ED1-9C464AA02E66}
+		{8B718281-57DE-4AB2-8603-FCEF0EC0E68E} = {9C86CB50-A226-4774-8ED1-9C464AA02E66}
+		{6AFA083D-2740-4A1C-8262-7789C60CEF32} = {9C86CB50-A226-4774-8ED1-9C464AA02E66}
+		{999DFEC2-F6D6-43D2-AE09-B1F31D4DE4E1} = {FEBA41BE-DBBA-4439-9E3F-0975477566E4}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1BDF449D-DC5B-4D61-A679-46654865F188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -36,5 +59,29 @@ Global
 		{B8CADB65-ACD4-47A3-9976-FD632E7F8784}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8CADB65-ACD4-47A3-9976-FD632E7F8784}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8CADB65-ACD4-47A3-9976-FD632E7F8784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EFDBFC3-C6B6-4116-829C-5FE851C2413A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EFDBFC3-C6B6-4116-829C-5FE851C2413A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EFDBFC3-C6B6-4116-829C-5FE851C2413A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EFDBFC3-C6B6-4116-829C-5FE851C2413A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{781EB721-CC85-4BEA-94E8-348462B3461A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{781EB721-CC85-4BEA-94E8-348462B3461A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{781EB721-CC85-4BEA-94E8-348462B3461A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{781EB721-CC85-4BEA-94E8-348462B3461A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A236B60-10FB-415F-9FCA-810BA3905CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A236B60-10FB-415F-9FCA-810BA3905CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A236B60-10FB-415F-9FCA-810BA3905CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A236B60-10FB-415F-9FCA-810BA3905CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B718281-57DE-4AB2-8603-FCEF0EC0E68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B718281-57DE-4AB2-8603-FCEF0EC0E68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B718281-57DE-4AB2-8603-FCEF0EC0E68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B718281-57DE-4AB2-8603-FCEF0EC0E68E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AFA083D-2740-4A1C-8262-7789C60CEF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AFA083D-2740-4A1C-8262-7789C60CEF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AFA083D-2740-4A1C-8262-7789C60CEF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AFA083D-2740-4A1C-8262-7789C60CEF32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{999DFEC2-F6D6-43D2-AE09-B1F31D4DE4E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{999DFEC2-F6D6-43D2-AE09-B1F31D4DE4E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{999DFEC2-F6D6-43D2-AE09-B1F31D4DE4E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{999DFEC2-F6D6-43D2-AE09-B1F31D4DE4E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
